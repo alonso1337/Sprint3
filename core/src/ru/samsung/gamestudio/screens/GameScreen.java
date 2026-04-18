@@ -12,6 +12,7 @@ import ru.samsung.gamestudio.ContactManager;
 import ru.samsung.gamestudio.GameResources;
 import ru.samsung.gamestudio.GameSession;
 import ru.samsung.gamestudio.GameSettings;
+import ru.samsung.gamestudio.MovingBackgroundView;
 import ru.samsung.gamestudio.MyGdxGame;
 import ru.samsung.gamestudio.objects.BulletObject;
 import ru.samsung.gamestudio.objects.ShipObject;
@@ -25,7 +26,11 @@ public class GameScreen extends ScreenAdapter {
     ArrayList<BulletObject> bulletArray;
 
     ShipObject shipObject;
+
+
+
     public GameScreen(MyGdxGame myGdxGame) {
+        backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_IMG_PATH);
         this.myGdxGame = myGdxGame;
         trashArray = new ArrayList<>();
         bulletArray = new ArrayList<>();
