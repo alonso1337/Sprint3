@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
+import ru.samsung.gamestudio.ContactManager;
 import ru.samsung.gamestudio.GameResources;
 import ru.samsung.gamestudio.GameSession;
 import ru.samsung.gamestudio.GameSettings;
@@ -35,6 +36,7 @@ public class GameScreen extends ScreenAdapter {
                 GameResources.SHIP_IMG_PATH,
                 myGdxGame.world
         );
+        new ContactManager(myGdxGame.world);
     }
     public void show() {
         gameSession.startGame();
@@ -63,7 +65,11 @@ public class GameScreen extends ScreenAdapter {
             BulletObject bulletObject = new BulletObject(GameResources.BULLET_IMG_PATH,shipObject.getX(),shipObject.getY() + 25 + GameSettings.SHIP_HEIGHT / 2,GameSettings.BULLET_WIDTH,GameSettings.BULLET_HEIGHT,myGdxGame.world);
             bulletArray.add(bulletObject);
         }
+        if (!shipObject.isAlive()) {
+            System.out.println("Game over!");
+        }
         updateTrash();
+        updateBullets();
         draw();
     }
 
@@ -79,20 +85,22 @@ public class GameScreen extends ScreenAdapter {
     }
     private void updateTrash() {
         for (int i = 0; i < trashArray.size(); i++) {
-            if (!trashArray.get(i).isInFrame()) {
+            if (!trashArray.get(i).isInFrame() || !trashArray.get(i).isAlive()) {
                 myGdxGame.world.destroyBody(trashArray.get(i).body);
                 trashArray.remove(i--);
             }
         }
     }
-    private void updateBullet() {
+    private void updateBullets() {
         for (int i = 0; i < bulletArray.size(); i++) {
-            if (!bulletArray.get(i).isInFrame()) {
+            if (bulletArray.get(i).hasToBeDestroyed()) {
                 myGdxGame.world.destroyBody(bulletArray.get(i).body);
                 bulletArray.remove(i--);
+                System.out.println("dsfdfs");
             }
         }
     }
+
 
 
 

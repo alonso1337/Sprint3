@@ -11,9 +11,11 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class GameObject {
     public Body body;
-    GameObject(String texturePath, int x, int y, int width, int height, World world) {
+    public short cBits;
+    GameObject(String texturePath, int x, int y, int width, int height, short cBits, World world) {
         this.width = width;
         this.height = height;
+        this.cBits = cBits;
 
         texture = new Texture(texturePath);
         body = createBody(x, y, world);
@@ -54,8 +56,10 @@ public class GameObject {
         fixtureDef.shape = circleShape; // устанавливаем коллайдер
         fixtureDef.density = 0.1f; // устанавливаем плотность тела
         fixtureDef.friction = 1f; // устанвливаем коэффициент трения
+        fixtureDef.filter.categoryBits = cBits;
 
-        body.createFixture(fixtureDef); // создаём fixture по описанному нами определению
+
+        body.createFixture(fixtureDef).setUserData(this); // создаём fixture по описанному нами определению
         circleShape.dispose(); // так как коллайдер уже скопирован в fixutre, то circleShape может быть отчищена, чтобы не забивать оперативную память.
 
         body.setTransform(x * SCALE, y * SCALE, 0); // устанавливаем позицию тела по координатным осям и угол поворота
@@ -65,7 +69,8 @@ public class GameObject {
         batch.draw(texture, getX() - (width / 2f), getY() - (height / 2f), width, height);
     }
     public void dispose() {
-
+        texture.dispose();
     }
+    public void hit() {}
 
 }
