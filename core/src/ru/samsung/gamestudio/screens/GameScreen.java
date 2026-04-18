@@ -26,10 +26,15 @@ public class GameScreen extends ScreenAdapter {
     ArrayList<BulletObject> bulletArray;
 
     ShipObject shipObject;
+    ContactManager contactManager;
+    MovingBackgroundView backgroundView;
+
 
 
 
     public GameScreen(MyGdxGame myGdxGame) {
+        gameSession = new GameSession();
+        contactManager = new ContactManager(myGdxGame.world);
         backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_IMG_PATH);
         this.myGdxGame = myGdxGame;
         trashArray = new ArrayList<>();
@@ -58,6 +63,7 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         myGdxGame.stepWorld();
         handleInput();
+        backgroundView.move();
         if (gameSession.shouldSpawnTrash()) {
             TrashObject trashObject = new TrashObject(
                     GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
@@ -83,6 +89,7 @@ public class GameScreen extends ScreenAdapter {
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
         ScreenUtils.clear(Color.CLEAR);
         myGdxGame.batch.begin();
+        backgroundView.draw(myGdxGame.batch);
         shipObject.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
         for (TrashObject trash : trashArray) trash.draw(myGdxGame.batch);
