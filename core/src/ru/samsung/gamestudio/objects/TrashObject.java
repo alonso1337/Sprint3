@@ -21,9 +21,7 @@ public class TrashObject extends GameObject {
         body.setLinearVelocity(new Vector2(0, -GameSettings.TRASH_VELOCITY));
 
     }
-
     public boolean isInFrame() {
         return getY() + height / 2 > 0;
     }
 }
-
