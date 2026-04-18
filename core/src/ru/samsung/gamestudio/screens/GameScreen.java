@@ -12,10 +12,12 @@ import ru.samsung.gamestudio.ContactManager;
 import ru.samsung.gamestudio.GameResources;
 import ru.samsung.gamestudio.GameSession;
 import ru.samsung.gamestudio.GameSettings;
+import ru.samsung.gamestudio.components.ButtonView;
 import ru.samsung.gamestudio.components.ImageView;
 import ru.samsung.gamestudio.components.LiveView;
 import ru.samsung.gamestudio.components.MovingBackgroundView;
 import ru.samsung.gamestudio.MyGdxGame;
+import ru.samsung.gamestudio.components.TextView;
 import ru.samsung.gamestudio.objects.BulletObject;
 import ru.samsung.gamestudio.objects.ShipObject;
 import ru.samsung.gamestudio.objects.TrashObject;
@@ -32,6 +34,8 @@ public class GameScreen extends ScreenAdapter {
     MovingBackgroundView backgroundView;
     ImageView topBlackoutView;
     LiveView liveView;
+    TextView scoreTextView;
+    ButtonView pauseButton;
 
 
 
@@ -41,6 +45,8 @@ public class GameScreen extends ScreenAdapter {
         gameSession = new GameSession();
         contactManager = new ContactManager(myGdxGame.world);
         backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_IMG_PATH);
+        pauseButton = new ButtonView(605, 1200, 46, 54, GameResources.PAUSE_IMG_PATH);
+        scoreTextView = new TextView(myGdxGame.commonWhiteFont, 50, 1215);
         this.myGdxGame = myGdxGame;
         trashArray = new ArrayList<>();
         bulletArray = new ArrayList<>();
@@ -87,6 +93,7 @@ public class GameScreen extends ScreenAdapter {
         if (!shipObject.isAlive()) {
             System.out.println("Game over!");
         }
+        scoreTextView.setText("Score: " + 100);
         updateTrash();
         updateBullets();
         draw();
@@ -103,7 +110,9 @@ public class GameScreen extends ScreenAdapter {
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
         for (TrashObject trash : trashArray) trash.draw(myGdxGame.batch);
         topBlackoutView.draw(myGdxGame.batch);
+        scoreTextView.draw(myGdxGame.batch);
         liveView.draw(myGdxGame.batch);
+        pauseButton.draw(myGdxGame.batch);
         myGdxGame.batch.end();
     }
     private void updateTrash() {
