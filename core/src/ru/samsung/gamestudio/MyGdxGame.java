@@ -27,6 +27,8 @@ public class MyGdxGame extends Game {
 
 	public GameScreen gameScreen;
 	public World world;
+	public BitmapFont commonBlackFont;
+	public BitmapFont largeWhiteFont;
 	float accumulator = 0;
 	public Vector3 touch;
 	public BitmapFont commonWhiteFont;

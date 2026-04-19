@@ -12,6 +12,7 @@ import ru.samsung.gamestudio.ContactManager;
 import ru.samsung.gamestudio.GameResources;
 import ru.samsung.gamestudio.GameSession;
 import ru.samsung.gamestudio.GameSettings;
+import ru.samsung.gamestudio.GameState;
 import ru.samsung.gamestudio.components.ButtonView;
 import ru.samsung.gamestudio.components.ImageView;
 import ru.samsung.gamestudio.components.LiveView;
@@ -37,6 +38,10 @@ public class GameScreen extends ScreenAdapter {
     TextView scoreTextView;
     ButtonView pauseButton;
     ImageView fullBlackoutView;
+    ButtonView homeButton;
+    ButtonView continueButton;
+    TextView pauseTextView;
+
 
 
 
@@ -47,6 +52,21 @@ public class GameScreen extends ScreenAdapter {
         contactManager = new ContactManager(myGdxGame.world);
         backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_IMG_PATH);
         pauseButton = new ButtonView(605, 1200, 46, 54, GameResources.PAUSE_IMG_PATH);
+        pauseTextView = new TextView(myGdxGame.largeWhiteFont, 282, 842, "Pause");
+        homeButton = new ButtonView(
+                138, 695,
+                200, 70,
+                myGdxGame.commonBlackFont,
+                GameResources.BUTTON_BACKGROUND_SHORT_PATH,
+                "Home"
+        );
+        continueButton = new ButtonView(
+                393, 695,
+                200, 70,
+                myGdxGame.commonBlackFont,
+                GameResources.BUTTON_BACKGROUND_SHORT_PATH,
+                "Continue"
+        );
         scoreTextView = new TextView(myGdxGame.commonWhiteFont, 50, 1215);
         fullBlackoutView = new ImageView(0, 0, GameResources.BLACKOUT_FULL_PATH);
         this.myGdxGame = myGdxGame;
@@ -67,18 +87,30 @@ public class GameScreen extends ScreenAdapter {
         gameSession.startGame();
     }
     private void handleInput() {
-        switch (gameSession.state) {
-            case PLAYING:
-                if (pauseButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-                    gameSession.pauseGame();
-                }
-                shipObject.move(myGdxGame.touch);
-                break;
+        if (Gdx.input.isTouched()) {
+            myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            case PAUSED:
-                break;
+            switch (gameSession.state) {
+                case PLAYING:
+                    if (pauseButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                        gameSession.pauseGame();
+                    }
+                    shipObject.move(myGdxGame.touch);
+                    break;
+
+                case PAUSED:
+                    if (continueButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                        gameSession.resumeGame();
+                    }
+                    if (homeButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                        System.out.println("end of game");
+                    }
+                    break;
+            }
+
         }
     }
+
 
 
     @Override
@@ -122,6 +154,13 @@ public class GameScreen extends ScreenAdapter {
         scoreTextView.draw(myGdxGame.batch);
         liveView.draw(myGdxGame.batch);
         pauseButton.draw(myGdxGame.batch);
+
+        if (gameSession.state == GameState.PAUSED) {
+            fullBlackoutView.draw(myGdxGame.batch);
+            pauseTextView.draw(myGdxGame.batch);
+            homeButton.draw(myGdxGame.batch);
+            continueButton.draw(myGdxGame.batch);
+        }
         myGdxGame.batch.end();
     }
     private void updateTrash() {
