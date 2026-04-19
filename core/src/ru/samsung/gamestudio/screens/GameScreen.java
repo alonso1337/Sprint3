@@ -180,6 +180,9 @@ public class GameScreen extends ScreenAdapter {
             }
         }
     }
+public void dispose() {
+
+}
 
 
 
