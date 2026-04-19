@@ -36,6 +36,7 @@ public class GameScreen extends ScreenAdapter {
     LiveView liveView;
     TextView scoreTextView;
     ButtonView pauseButton;
+    ImageView fullBlackoutView;
 
 
 
@@ -47,6 +48,7 @@ public class GameScreen extends ScreenAdapter {
         backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_IMG_PATH);
         pauseButton = new ButtonView(605, 1200, 46, 54, GameResources.PAUSE_IMG_PATH);
         scoreTextView = new TextView(myGdxGame.commonWhiteFont, 50, 1215);
+        fullBlackoutView = new ImageView(0, 0, GameResources.BLACKOUT_FULL_PATH);
         this.myGdxGame = myGdxGame;
         trashArray = new ArrayList<>();
         bulletArray = new ArrayList<>();
@@ -65,9 +67,16 @@ public class GameScreen extends ScreenAdapter {
         gameSession.startGame();
     }
     private void handleInput() {
-        if (Gdx.input.isTouched()) {
-            myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            shipObject.move(myGdxGame.touch);
+        switch (gameSession.state) {
+            case PLAYING:
+                if (pauseButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                    gameSession.pauseGame();
+                }
+                shipObject.move(myGdxGame.touch);
+                break;
+
+            case PAUSED:
+                break;
         }
     }
 
