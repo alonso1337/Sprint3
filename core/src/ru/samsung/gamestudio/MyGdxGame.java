@@ -1,7 +1,5 @@
 package ru.samsung.gamestudio;
 
-import static com.badlogic.gdx.graphics.Color.WHITE;
-import static ru.samsung.gamestudio.GameResources.FONT_PATH;
 import static ru.samsung.gamestudio.GameSettings.POSITION_ITERATIONS;
 import static ru.samsung.gamestudio.GameSettings.STEP_TIME;
 import static ru.samsung.gamestudio.GameSettings.VELOCITY_ITERATIONS;

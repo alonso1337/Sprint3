@@ -115,30 +115,44 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        myGdxGame.stepWorld();
-        handleInput();
-        backgroundView.move();
 
-        if (gameSession.shouldSpawnTrash()) {
-            TrashObject trashObject = new TrashObject(
-                    GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
-                    GameResources.TRASH_IMG_PATH,
-                    myGdxGame.world
-            );
-            trashArray.add(trashObject);
+        handleInput();
+
+
+        if (gameSession.state == GameState.PLAYING) {
+            if (gameSession.shouldSpawnTrash()) {
+                TrashObject trashObject = new TrashObject(
+                        GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
+                        GameResources.TRASH_IMG_PATH,
+                        myGdxGame.world
+                );
+                trashArray.add(trashObject);
+            }
+
+            if (shipObject.needToShoot()) {
+                BulletObject laserBullet = new BulletObject(
+                        shipObject.getX(), shipObject.getY() + shipObject.height / 2,
+                        GameSettings.BULLET_WIDTH, GameSettings.BULLET_HEIGHT,
+                        GameResources.BULLET_IMG_PATH,
+                        myGdxGame.world
+                );
+                bulletArray.add(laserBullet);
+            }
+
+            if (!shipObject.isAlive()) {
+                System.out.println("Game over!");
+            }
+
+            updateTrash();
+            updateBullets();
+            backgroundView.move();
+            scoreTextView.setText("Score: " + 100);
+            liveView.setLeftLives(shipObject.getLiveLeft());
+
+            myGdxGame.stepWorld();
         }
-        if (shipObject.needToShoot()) {
-            BulletObject bulletObject = new BulletObject(GameResources.BULLET_IMG_PATH,shipObject.getX(),shipObject.getY() + 25 + GameSettings.SHIP_HEIGHT / 2,GameSettings.BULLET_WIDTH,GameSettings.BULLET_HEIGHT,myGdxGame.world);
-            bulletArray.add(bulletObject);
-        }
-        if (!shipObject.isAlive()) {
-            System.out.println("Game over!");
-        }
-        scoreTextView.setText("Score: " + 100);
-        updateTrash();
-        updateBullets();
+
         draw();
-        liveView.setLeftLives(shipObject.getLiveLeft());
     }
 
     private void draw() {
@@ -176,13 +190,10 @@ public class GameScreen extends ScreenAdapter {
             if (bulletArray.get(i).hasToBeDestroyed()) {
                 myGdxGame.world.destroyBody(bulletArray.get(i).body);
                 bulletArray.remove(i--);
-                System.out.println("dsfdfs");
+                
             }
         }
     }
-public void dispose() {
-
-}
 
 
 
