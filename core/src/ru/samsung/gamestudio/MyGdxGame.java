@@ -16,9 +16,10 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 
 import ru.samsung.gamestudio.screens.GameScreen;
+import ru.samsung.gamestudio.screens.MenuScreen;
 
 
-public class MyGdxGame extends Game {
+public class 	MyGdxGame extends Game {
 
 	public SpriteBatch batch;
 	public OrthographicCamera camera;
@@ -30,6 +31,7 @@ public class MyGdxGame extends Game {
 	float accumulator = 0;
 	public Vector3 touch;
 	public BitmapFont commonWhiteFont;
+	public MenuScreen menuScreen;
 
 
 	public void stepWorld() {
@@ -47,16 +49,19 @@ public class MyGdxGame extends Game {
 	public void create() {
 		Box2D.init();
 		world = new World(new Vector2(0, 0), true);
+		largeWhiteFont = FontBuilder.generate(48, Color.WHITE, GameResources.FONT_PATH);
 		commonWhiteFont = FontBuilder.generate(24, Color.WHITE, GameResources.FONT_PATH);
+		commonBlackFont = FontBuilder.generate(24, Color.BLACK, GameResources.FONT_PATH);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT);
 
 		touch = new Vector3();
 		gameScreen = new GameScreen(this);
+		menuScreen = new MenuScreen(this);
 
 
-		setScreen(gameScreen);
+		setScreen(menuScreen);
 
 	}
 

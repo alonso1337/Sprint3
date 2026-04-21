@@ -84,7 +84,7 @@ public class GameScreen extends ScreenAdapter {
         new ContactManager(myGdxGame.world);
     }
     public void show() {
-        gameSession.startGame();
+        restartGame();
     }
     private void handleInput() {
         if (Gdx.input.isTouched()) {
@@ -103,15 +103,13 @@ public class GameScreen extends ScreenAdapter {
                         gameSession.resumeGame();
                     }
                     if (homeButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-                        System.out.println("end of game");
+                        myGdxGame.setScreen(myGdxGame.menuScreen);
                     }
                     break;
             }
 
         }
     }
-
-
 
     @Override
     public void render(float delta) {
@@ -156,14 +154,16 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void draw() {
+
         myGdxGame.camera.update();
         myGdxGame.batch.setProjectionMatrix(myGdxGame.camera.combined);
         ScreenUtils.clear(Color.CLEAR);
+
         myGdxGame.batch.begin();
         backgroundView.draw(myGdxGame.batch);
+        for (TrashObject trash : trashArray) trash.draw(myGdxGame.batch);
         shipObject.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
-        for (TrashObject trash : trashArray) trash.draw(myGdxGame.batch);
         topBlackoutView.draw(myGdxGame.batch);
         scoreTextView.draw(myGdxGame.batch);
         liveView.draw(myGdxGame.batch);
@@ -175,7 +175,9 @@ public class GameScreen extends ScreenAdapter {
             homeButton.draw(myGdxGame.batch);
             continueButton.draw(myGdxGame.batch);
         }
+
         myGdxGame.batch.end();
+
     }
     private void updateTrash() {
         for (int i = 0; i < trashArray.size(); i++) {
@@ -194,8 +196,26 @@ public class GameScreen extends ScreenAdapter {
             }
         }
     }
+    private void restartGame() {
 
+        for (int i = 0; i < trashArray.size(); i++) {
+            myGdxGame.world.destroyBody(trashArray.get(i).body);
+            trashArray.remove(i--);
+        }
 
+        if (shipObject != null) {
+            myGdxGame.world.destroyBody(shipObject.body);
+        }
 
+        shipObject = new ShipObject(
+                GameSettings.SCREEN_WIDTH / 2, 150,
+                GameSettings.SHIP_WIDTH, GameSettings.SHIP_HEIGHT,
+                GameResources.SHIP_IMG_PATH,
+                myGdxGame.world
+        );
+
+        bulletArray.clear();
+        gameSession.startGame();
+    }
 
 }
