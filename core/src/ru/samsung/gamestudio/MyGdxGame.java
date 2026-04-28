@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import ru.samsung.gamestudio.managers.AudioManager;
 import ru.samsung.gamestudio.screens.GameScreen;
 import ru.samsung.gamestudio.screens.MenuScreen;
+import ru.samsung.gamestudio.screens.SettingsScreen;
 
 
 public class 	MyGdxGame extends Game {
@@ -33,6 +34,7 @@ public class 	MyGdxGame extends Game {
 	public Vector3 touch;
 	public BitmapFont commonWhiteFont;
 	public MenuScreen menuScreen;
+	public SettingsScreen settingsScreen;
 	public AudioManager audioManager;
 
 
@@ -62,6 +64,7 @@ public class 	MyGdxGame extends Game {
 		touch = new Vector3();
 		gameScreen = new GameScreen(this);
 		menuScreen = new MenuScreen(this);
+		settingsScreen = new SettingsScreen(this);
 
 
 
