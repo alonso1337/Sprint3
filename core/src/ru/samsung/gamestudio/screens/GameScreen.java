@@ -46,7 +46,7 @@ public class GameScreen extends ScreenAdapter {
     TextView recordsTextView;
     RecordsListView recordsListView;
     ButtonView homeButton2;
-
+    ButtonView restartButton;
 
 
 
@@ -72,6 +72,12 @@ public class GameScreen extends ScreenAdapter {
                 GameResources.BUTTON_BACKGROUND_SHORT_PATH,
                 "Continue"
         );
+        restartButton = new ButtonView(
+                380, 365,
+                160, 70,
+                myGdxGame.commonBlackFont,
+                GameResources.BUTTON_BACKGROUND_SHORT_PATH,
+                "Restart");
         scoreTextView = new TextView(myGdxGame.commonWhiteFont, 50, 1215);
         fullBlackoutView = new ImageView(0, 0, GameResources.BLACKOUT_FULL_PATH);
         this.myGdxGame = myGdxGame;
@@ -89,7 +95,7 @@ public class GameScreen extends ScreenAdapter {
         recordsListView = new RecordsListView(myGdxGame.commonWhiteFont, 690);
         recordsTextView = new TextView(myGdxGame.largeWhiteFont, 206, 842, "Last records");
         homeButton2 = new ButtonView(
-                280, 365,
+                180, 365,
                 160, 70,
                 myGdxGame.commonBlackFont,
                 GameResources.BUTTON_BACKGROUND_SHORT_PATH,
@@ -122,6 +128,10 @@ public class GameScreen extends ScreenAdapter {
                 case ENDED:
                     if (homeButton2.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                         myGdxGame.setScreen(myGdxGame.menuScreen);
+                    }
+                    if(restartButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)){
+                        //gameSession.startGame();
+                        myGdxGame.setScreen(myGdxGame.gameScreen);
                     }
                     break;
 
@@ -201,6 +211,7 @@ public class GameScreen extends ScreenAdapter {
             recordsTextView.draw(myGdxGame.batch);
             recordsListView.draw(myGdxGame.batch);
             homeButton2.draw(myGdxGame.batch);
+            restartButton.draw(myGdxGame.batch);
         }
 
         myGdxGame.batch.end();
