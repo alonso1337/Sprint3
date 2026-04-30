@@ -130,7 +130,6 @@ public class GameScreen extends ScreenAdapter {
                         myGdxGame.setScreen(myGdxGame.menuScreen);
                     }
                     if(restartButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)){
-                        //gameSession.startGame();
                         myGdxGame.setScreen(myGdxGame.gameScreen);
                     }
                     break;
